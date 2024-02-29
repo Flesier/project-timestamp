@@ -26,12 +26,17 @@ app.get("/api/hello", function (req, res) {
  
 app.get('/api/:date?', (req, res) => {
   let date;
-
-  if (req.params.date) {
-    const timestamp = parseInt(req.params.date);
-    date = new Date(timestamp); // Convert Unix timestamp to milliseconds
-  } else {
+  if (!req.params.date) {
     date = new Date();
+  } else {
+    const timestamp = parseInt(req.params.date);
+
+    // Check if the provided date is a valid Unix timestamp
+    if (isNaN(timestamp)) {
+      date = new Date(req.params.date);
+    } else {
+      date = new Date(timestamp); // Convert Unix timestamp to milliseconds
+    }
   }
 
   // Check if the date is valid
@@ -40,13 +45,12 @@ app.get('/api/:date?', (req, res) => {
   }
 
   // Calculate Unix timestamp and UTC date string
-  const unix = date.getTime(); // Convert milliseconds to seconds
+  const unix = date.getTime(); // No need to divide by 1000
   const utc = date.toUTCString();
 
   // Return JSON object with Unix timestamp and UTC date string
   res.json({ unix, utc });
 });
-
 
 
 // Listen on port set in environment variable or default to 3000
