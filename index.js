@@ -29,7 +29,7 @@ app.get('/api/:date?', (req, res) => {
 
   if (req.params.date) {
     const timestamp = parseInt(req.params.date);
-    date = new Date(timestamp * 1000); // Convert Unix timestamp to milliseconds
+    date = new Date(timestamp); // Convert Unix timestamp to milliseconds
   } else {
     date = new Date();
   }
@@ -40,7 +40,7 @@ app.get('/api/:date?', (req, res) => {
   }
 
   // Calculate Unix timestamp and UTC date string
-  const unix = Math.floor(date.getTime() / 1000); // Convert milliseconds to seconds
+  const unix = date.getTime(); // Convert milliseconds to seconds
   const utc = date.toUTCString();
 
   // Return JSON object with Unix timestamp and UTC date string
