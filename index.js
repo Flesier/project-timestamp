@@ -23,6 +23,18 @@ app.get("/", function (req, res) {
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
+ 
+app.get('/api/:date?', (req, res) => {
+  let date = req.params.date ? new Date(req.params.date) : new Date();
+  
+  if (date.toString() === 'Invalid Date') {
+    return res.json({ error: 'Invalid Date' });
+  }
+  const unix = date.getTime();
+  const utc = date.toUTCString();
+
+  res.json({ unix, utc });
+});
 
 
 
